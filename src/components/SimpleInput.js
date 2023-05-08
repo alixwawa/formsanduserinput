@@ -11,26 +11,20 @@ const SimpleInput = () => {
 		reset: resetNameInput,
 	} = useInput((value) => value.trim() !== '');
 
-	const [enteredEmail, setEnteredEmail] = useState('');
-	const [enteredEmailTouched, setEnteredEmailTouched] = useState(false);
-
-	const enteredEmailIsValid =
-		enteredEmail.trim().includes('@') && enteredEmail.trim() !== '';
-	const emailInputIsInvalid = !enteredEmailIsValid && enteredEmailTouched;
+	const {
+		value: enteredEmail,
+		isValid: enteredEmailIsValid,
+		hasError: emailInputHasError,
+		valueChangeHandler: emailChangedhandler,
+		InputBlurHandler: emailBlurHandler,
+		reset: resetEmailInput,
+	} = useInput((value) => value.trim().includes('@') && value.trim() !== '');
 
 	let formIsValid = false;
 
 	if (enteredNameIsValid && enteredEmailIsValid) {
 		formIsValid = true;
 	}
-
-	const emailInputChangeHandler = (event) => {
-		setEnteredEmail(event.target.value);
-	};
-
-	const emailInputBlurHandler = () => {
-		setEnteredEmailTouched(true);
-	};
 
 	const formSubmissionHandler = (event) => {
 		event.preventDefault();
@@ -43,19 +37,16 @@ const SimpleInput = () => {
 
 		resetNameInput();
 
-		setEnteredEmail('');
-		setEnteredEmailTouched(false);
+		resetEmailInput();
 	};
 
 	const nameInputClasses = nameInputHasError
 		? 'form-control invalid'
 		: 'form-control';
 
-	const emailInputClasses = emailInputIsInvalid
+	const emailInputClasses = emailInputHasError
 		? 'form-control invalid'
 		: 'form-control';
-
-	console.log(formIsValid);
 
 	return (
 		<form onSubmit={formSubmissionHandler}>
@@ -77,11 +68,11 @@ const SimpleInput = () => {
 				<input
 					type="email"
 					id="email"
-					onChange={emailInputChangeHandler}
-					onBlur={emailInputBlurHandler}
+					onChange={emailChangedhandler}
+					onBlur={emailBlurHandler}
 					value={enteredEmail}
 				/>
-				{emailInputIsInvalid && (
+				{emailInputHasError && (
 					<p className="error-text">Email must not be empty and contain @.</p>
 				)}
 			</div>
