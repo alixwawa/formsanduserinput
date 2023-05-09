@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import useInput from '../hooks/use-input';
 
 const SimpleInput = () => {
@@ -7,7 +7,7 @@ const SimpleInput = () => {
 		isValid: enteredNameIsValid,
 		hasError: nameInputHasError,
 		valueChangeHandler: nameChangedhandler,
-		InputBlurHandler: nameBlurHandler,
+		inputBlurHandler: nameBlurHandler,
 		reset: resetNameInput,
 	} = useInput((value) => value.trim() !== '');
 
