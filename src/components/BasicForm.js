@@ -1,5 +1,8 @@
 import useInput from '../hooks/use-input';
 
+const isNotEmpty = (value) => value.trim() !== '';
+const isEmail = email => email.trim().includes('@')
+
 const BasicForm = () => {
 	const {
 		value: firstNameValue,
@@ -8,7 +11,7 @@ const BasicForm = () => {
 		valueChangeHandler: firstNameChangeHandler,
 		inputBlurHandler: firstNameBlurHandler,
 		reset: resetFirstName,
-	} = useInput((firstName) => firstName.trim() !== '');
+	} = useInput(isNotEmpty);
 
 	const {
 		value: lastNameValue,
@@ -17,7 +20,7 @@ const BasicForm = () => {
 		valueChangeHandler: lastNameChangeHandler,
 		inputBlurHandler: lastNameBlurHandler,
 		reset: resetLastName,
-	} = useInput((lastName) => lastName.trim() !== '');
+	} = useInput(isNotEmpty);
 
 	const {
 		value: emailValue,
@@ -26,7 +29,7 @@ const BasicForm = () => {
 		valueChangeHandler: emailChangeHandler,
 		inputBlurHandler: emailBlurHandler,
 		reset: resetEmail,
-	} = useInput((email) => email.trim() !== '' && email.trim().includes('@'));
+	} = useInput(isNotEmpty && isEmail);
 
 	let formIsValid = false;
 
@@ -54,11 +57,11 @@ const BasicForm = () => {
 
 	const lastNameInputClasses = lastNameHasError
 		? 'form-control invalid'
-    : 'form-control';
-  
-  	const emailInputClasses = emailHasError
-			? 'form-control invalid'
-			: 'form-control';
+		: 'form-control';
+
+	const emailInputClasses = emailHasError
+		? 'form-control invalid'
+		: 'form-control';
 
 	return (
 		<form onSubmit={formHandler}>
@@ -99,12 +102,10 @@ const BasicForm = () => {
 					onBlur={emailBlurHandler}
 					value={emailValue}
 				/>
-				{emailHasError && (
-					<p className="error-text">Email must be valid.</p>
-				)}
+				{emailHasError && <p className="error-text">Email must be valid.</p>}
 			</div>
 			<div className="form-actions">
-				<button>Submit</button>
+				<button disabled={!formIsValid}>Submit</button>
 			</div>
 		</form>
 	);
